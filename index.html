@@ -51,12 +51,17 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, opacity 0.3s ease;
       margin-bottom: 1rem;
     }
 
     button:hover {
       background: #0d8ddb;
+    }
+
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
     }
 
     .copy-btn {
@@ -65,6 +70,20 @@
 
     .copy-btn:hover {
       background: #5146e1;
+    }
+
+    #copy-message {
+      font-size: 14px;
+      color: #4caf50;
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      height: 1.4em;
+    }
+
+    #copy-message.show {
+      opacity: 1;
     }
 
     footer {
@@ -80,8 +99,9 @@
     <textarea id="text" rows="4" placeholder="投稿したい文言を入力してください"></textarea>
     <button onclick="generateLink()">✅ シェアリンクを生成</button>
     <input type="text" id="output" readonly placeholder="ここに生成されたURLが表示されます" />
-    <button class="copy-btn" onclick="copyToClipboard()">📋 コピーする</button>
-    <footer>Made with ❤️ by sui</footer>
+    <button class="copy-btn" id="copy-btn" onclick="copyToClipboard()">📋 コピーする</button>
+    <div id="copy-message">✅ コピーしました！</div>
+    <footer>Made with ❤️ by You</footer>
   </div>
 
   <script>
@@ -94,9 +114,23 @@
 
     function copyToClipboard() {
       const output = document.getElementById('output');
+      const copyBtn = document.getElementById('copy-btn');
+      const msg = document.getElementById('copy-message');
+
       output.select();
       document.execCommand('copy');
-      alert('URLをコピーしました！');
+
+      // ボタンを一時的に無効化
+      copyBtn.disabled = true;
+
+      // メッセージ表示（フェードイン）
+      msg.classList.add('show');
+
+      // 3秒後に非表示＆ボタン復活
+      setTimeout(() => {
+        msg.classList.remove('show');
+        copyBtn.disabled = false;
+      }, 3000);
     }
   </script>
 </body>
