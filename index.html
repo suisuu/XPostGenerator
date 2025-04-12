@@ -104,33 +104,40 @@
     <footer>Made with ❤️ by You</footer>
   </div>
 
-  <script>
-    function generateLink() {
-      const text = document.getElementById('text').value;
-      const encodedText = encodeURIComponent(text);
-      const url = `https://twitter.com/intent/tweet?text=${encodedText}`;
-      document.getElementById('output').value = url;
-    }
+<script>
+  function generateLink() {
+    const text = document.getElementById('text').value;
+    const encodedText = encodeURIComponent(text);
+    const fullUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
 
-    function copyToClipboard() {
-      const output = document.getElementById('output');
-      const copyBtn = document.getElementById('copy-btn');
-      const msg = document.getElementById('copy-message');
+    // TinyURL APIを使って短縮URLを生成
+    fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(fullUrl)}`)
+      .then((res) => res.text())
+      .then((shortUrl) => {
+        document.getElementById('output').value = shortUrl;
+      })
+      .catch((err) => {
+        console.error('URL短縮に失敗しました:', err);
+        document.getElementById('output').value = 'URL短縮に失敗しました';
+      });
+  }
 
-      // コピー実行
-      output.select();
-      document.execCommand('copy');
+  function copyToClipboard() {
+    const output = document.getElementById('output');
+    const copyBtn = document.getElementById('copy-btn');
+    const msg = document.getElementById('copy-message');
 
-      // ボタン一時無効化 & メッセージ表示
-      copyBtn.disabled = true;
-      msg.classList.add('show');
+    output.select();
+    document.execCommand('copy');
 
-      // 3秒後に非表示＆ボタン有効化
-      setTimeout(() => {
-        msg.classList.remove('show');
-        copyBtn.disabled = false;
-      }, 3000);
-    }
-  </script>
+    copyBtn.disabled = true;
+    msg.classList.add('show');
+
+    setTimeout(() => {
+      msg.classList.remove('show');
+      copyBtn.disabled = false;
+    }, 3000);
+  }
+</script>
 </body>
 </html>
