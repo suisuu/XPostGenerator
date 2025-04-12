@@ -6,43 +6,83 @@
   <title>Xシェアリンク生成</title>
   <style>
     body {
-      font-family: sans-serif;
-      padding: 1em;
-      background: #f9f9f9;
-      color: #333;
-      max-width: 600px;
-      margin: auto;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
-    h2 {
+
+    .card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 90%;
       text-align: center;
-      margin-bottom: 1rem;
     }
-    textarea, input, button {
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    textarea, input {
       width: 100%;
-      padding: 10px;
-      margin: 0.5rem 0;
-      font-size: 16px;
-      border-radius: 6px;
+      padding: 12px;
       border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 1rem;
       box-sizing: border-box;
     }
+
     button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
       background: #1da1f2;
       color: white;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s ease;
+      margin-bottom: 1rem;
     }
+
     button:hover {
       background: #0d8ddb;
+    }
+
+    .copy-btn {
+      background: #6c63ff;
+    }
+
+    .copy-btn:hover {
+      background: #5146e1;
+    }
+
+    footer {
+      margin-top: 1rem;
+      font-size: 12px;
+      color: #777;
     }
   </style>
 </head>
 <body>
-  <h2>X（Twitter）シェアリンク作成ツール</h2>
-  <textarea id="text" rows="4" placeholder="投稿したい文言を入力してください"></textarea>
-  <button onclick="generateLink()">シェアリンクを生成</button>
-  <input type="text" id="output" readonly placeholder="ここに生成されたURLが表示されます" />
-  <button onclick="copyToClipboard()">コピーする</button>
+  <div class="card">
+    <h2>X（Twitter）シェアリンク作成ツール</h2>
+    <textarea id="text" rows="4" placeholder="投稿したい文言を入力してください"></textarea>
+    <button onclick="generateLink()">✅ シェアリンクを生成</button>
+    <input type="text" id="output" readonly placeholder="ここに生成されたURLが表示されます" />
+    <button class="copy-btn" onclick="copyToClipboard()">📋 コピーする</button>
+    <footer>Made with ❤️ by You</footer>
+  </div>
 
   <script>
     function generateLink() {
