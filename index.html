@@ -75,10 +75,11 @@
     #copy-message {
       font-size: 14px;
       color: #4caf50;
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
       opacity: 0;
       transition: opacity 0.5s ease;
-      height: 1.2em;
-      margin-bottom: 1rem;
+      height: 1.4em;
     }
 
     #copy-message.show {
@@ -116,16 +117,15 @@
       const copyBtn = document.getElementById('copy-btn');
       const msg = document.getElementById('copy-message');
 
+      // コピー実行
       output.select();
       document.execCommand('copy');
 
-      // ボタンを一時的に無効化
+      // ボタン一時無効化 & メッセージ表示
       copyBtn.disabled = true;
-
-      // メッセージ表示（フェードイン）
       msg.classList.add('show');
 
-      // 3秒後に非表示＆ボタン復活
+      // 3秒後に非表示＆ボタン有効化
       setTimeout(() => {
         msg.classList.remove('show');
         copyBtn.disabled = false;
