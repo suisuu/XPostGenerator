@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Xシェアリンク生成</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1em;
+      background: #f9f9f9;
+      color: #333;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    textarea, input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 0.5rem 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background: #1da1f2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0d8ddb;
+    }
+  </style>
+</head>
+<body>
+  <h2>X（Twitter）シェアリンク作成ツール</h2>
+  <textarea id="text" rows="4" placeholder="投稿したい文言を入力してください"></textarea>
+  <button onclick="generateLink()">シェアリンクを生成</button>
+  <input type="text" id="output" readonly placeholder="ここに生成されたURLが表示されます" />
+  <button onclick="copyToClipboard()">コピーする</button>
+
+  <script>
+    function generateLink() {
+      const text = document.getElementById('text').value;
+      const encodedText = encodeURIComponent(text);
+      const url = `https://twitter.com/intent/tweet?text=${encodedText}`;
+      document.getElementById('output').value = url;
+    }
+
+    function copyToClipboard() {
+      const output = document.getElementById('output');
+      output.select();
+      document.execCommand('copy');
+      alert('URLをコピーしました！');
+    }
+  </script>
+</body>
+</html>
