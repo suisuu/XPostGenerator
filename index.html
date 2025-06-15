@@ -110,8 +110,8 @@
     const encodedText = encodeURIComponent(text);
     const fullUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
 
-    // TinyURL APIを使って短縮URLを生成
-    fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(fullUrl)}`)
+    // x.gd API を使って短縮URLを生成
+    fetch(`https://x.gd/create.php?format=simple&url=${encodeURIComponent(fullUrl)}`)
       .then((res) => res.text())
       .then((shortUrl) => {
         document.getElementById('output').value = shortUrl;
