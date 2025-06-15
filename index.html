@@ -131,10 +131,10 @@
       const encodedText = encodeURIComponent(text);
       const fullUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
 
-      // TinyURLを使用（CORS対応）
-      fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(fullUrl)}`)
+      // is.gdはCORS対応済み
+      fetch(`https://is.gd/create.php?format=simple&url=${encodeURIComponent(fullUrl)}`)
         .then((res) => {
-          if (!res.ok) throw new Error("TinyURL API error");
+          if (!res.ok) throw new Error("短縮APIの取得に失敗しました");
           return res.text();
         })
         .then((shortUrl) => {
