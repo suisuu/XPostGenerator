@@ -131,9 +131,10 @@
       const encodedText = encodeURIComponent(text);
       const fullUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
 
-      fetch(`https://x.gd/create.php?format=simple&url=${encodeURIComponent(fullUrl)}`)
+      // TinyURLを使用（CORS対応）
+      fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(fullUrl)}`)
         .then((res) => {
-          if (!res.ok) throw new Error("短縮APIエラー");
+          if (!res.ok) throw new Error("TinyURL API error");
           return res.text();
         })
         .then((shortUrl) => {
@@ -141,7 +142,7 @@
         })
         .catch((err) => {
           console.error(err);
-          error.textContent = '🚫 URL短縮に失敗しました。もう一度お試しください。';
+          error.textContent = '🚫 URL短縮に失敗しました。';
         });
     }
 
