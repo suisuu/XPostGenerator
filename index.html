@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Xシェアリンク生成</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
     body {
       margin: 0;
@@ -75,15 +76,20 @@
     #copy-message {
       font-size: 14px;
       color: #4caf50;
-      margin-top: -0.5rem;
-      margin-bottom: 1rem;
       opacity: 0;
       transition: opacity 0.5s ease;
       height: 1.4em;
+      margin-bottom: 1rem;
     }
 
     #copy-message.show {
       opacity: 1;
+    }
+
+    #error-message {
+      font-size: 14px;
+      color: #f44336;
+      margin-bottom: 1rem;
     }
 
     footer {
@@ -98,46 +104,65 @@
     <h2>X（Twitter）シェアリンク作成ツール</h2>
     <textarea id="text" rows="4" placeholder="投稿したい文言を入力してください"></textarea>
     <button onclick="generateLink()">✅ シェアリンクを生成</button>
-    <input type="text" id="output" readonly placeholder="ここに生成されたURLが表示されます" />
+    <input type="text" id="output" readonly placeholder="ここに短縮URLが表示されます" />
     <button class="copy-btn" id="copy-btn" onclick="copyToClipboard()">📋 コピーする</button>
     <div id="copy-message">✅ コピーしました！</div>
+    <div id="error-message"></div>
     <footer>Made with ❤️ by You</footer>
   </div>
 
-<script>
-  function generateLink() {
-    const text = document.getElementById('text').value;
-    const encodedText = encodeURIComponent(text);
-    const fullUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
+  <script>
+    function generateLink() {
+      const text = document.getElementById('text').value.trim();
+      const output = document.getElementById('output');
+      const error = document.getElementById('error-message');
+      const msg = document.getElementById('copy-message');
 
-    // x.gd API を使って短縮URLを生成
-    fetch(`https://x.gd/create.php?format=simple&url=${encodeURIComponent(fullUrl)}`)
-      .then((res) => res.text())
-      .then((shortUrl) => {
-        document.getElementById('output').value = shortUrl;
-      })
-      .catch((err) => {
-        console.error('URL短縮に失敗しました:', err);
-        document.getElementById('output').value = 'URL短縮に失敗しました';
-      });
-  }
-
-  function copyToClipboard() {
-    const output = document.getElementById('output');
-    const copyBtn = document.getElementById('copy-btn');
-    const msg = document.getElementById('copy-message');
-
-    output.select();
-    document.execCommand('copy');
-
-    copyBtn.disabled = true;
-    msg.classList.add('show');
-
-    setTimeout(() => {
+      // リセット
+      output.value = '';
       msg.classList.remove('show');
-      copyBtn.disabled = false;
-    }, 3000);
-  }
-</script>
+      error.textContent = '';
+
+      if (!text) {
+        error.textContent = '⚠️ 投稿文を入力してください';
+        return;
+      }
+
+      const encodedText = encodeURIComponent(text);
+      const fullUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
+
+      fetch(`https://x.gd/create.php?format=simple&url=${encodeURIComponent(fullUrl)}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("短縮APIエラー");
+          return res.text();
+        })
+        .then((shortUrl) => {
+          output.value = shortUrl;
+        })
+        .catch((err) => {
+          console.error(err);
+          error.textContent = '🚫 URL短縮に失敗しました。もう一度お試しください。';
+        });
+    }
+
+    function copyToClipboard() {
+      const output = document.getElementById('output');
+      const copyBtn = document.getElementById('copy-btn');
+      const msg = document.getElementById('copy-message');
+
+      if (!output.value) return;
+
+      output.select();
+      document.execCommand('copy');
+
+      copyBtn.disabled = true;
+      msg.classList.add('show');
+
+      setTimeout(() => {
+        msg.classList.remove('show');
+        copyBtn.disabled = false;
+      }, 3000);
+    }
+  </script>
 </body>
 </html>
